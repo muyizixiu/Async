@@ -1,0 +1,14 @@
+{
+    "name": "yizixiumu/async",
+    "type": "library",
+    "authors": [
+        {
+            "name": "muyizixiu",
+            "email": "muyizixiu@outlook.com"
+        }
+    ],
+    "require": {}
+    "autoload":{
+	    "psr-4":{"Async\\":"src"}
+    }
+}
