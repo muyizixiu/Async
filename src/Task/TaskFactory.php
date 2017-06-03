@@ -17,9 +17,9 @@ class TaskFactory{
 	//异步进程最大数量限制
 	static public function init($manager,$task,$task_name,$taskData,$persist = true,$isQueued = true,$tick){
 		if($isQueued){
-			return new BlockTask($task, $task_name, $task_data, $manager);
+			return new BlockTask($task, $task_name, $taskData, $manager,self::POLLING_INTERVAL);
 		}else{
-			return new CommonTask($task, $task_name, $task_data, $manager, $persist, $tick);
+			return new CommonTask($task, $task_name, $taskData, $manager, $persist, $tick);
 		}
 	}
 }

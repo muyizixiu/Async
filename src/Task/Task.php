@@ -7,11 +7,18 @@ namespace Async\Task;
 
 use Async\Manager;
 abstract class Task{
-	private $task_name = '';
+	public $task_name = '';
 	private $task = null;
 	private $manager = null;
 	private $persist = false;
 	private $process_id = 0;
+
+	function __construct($task_name,$task,$manager,$persist){
+		$this->task = $task;
+		$this->task_name = $task_name;
+		$this->persist = $persist;
+		$this->manager = $manager;
+	}
 	//任务初始化动作
 	protected function init(){
 		return $this->manager->taskRegister($this->task_name,$this->process_id);
