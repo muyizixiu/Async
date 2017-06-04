@@ -7,7 +7,5 @@ namespace Async;
 
 use Exception;
 
-class Errors{
-
-
+class AsyncException extends Exception{
 }

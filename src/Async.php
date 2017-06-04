@@ -18,7 +18,7 @@ class Async{
 	private static $instance = null;
 
 	//redis
-	private $redis = null;
+	public $redis = null;
 
 
 	public function __construct($redis,$log){
@@ -37,9 +37,16 @@ class Async{
 	 * @param mixed $taskData 任务数据，进程会根据不同参数通过不同渠道将数据给$task任务
 	 * @param int $tick $task任务在持久化非阻塞的情况下为轮询执行，由tick指定执行时间
 	 */
-	public function task(Closure $task, $task_name, $persist = false, $isQueued = true, $taskData = null, $tick = 0){
+	public function task(Closure $task, $task_name, $persist = false, $isQueued = false, $taskData = null, $tick = 0){
 		$manager = new Manager($this->redis);
-		$manager->isTaskExist($task_name);
+		$exist = $manager->isTaskExist($task_name);
+        if($exist){
+            if($persist){
+                return $manager->sendData($task_name,$taskData);
+            }else{
+                throw new \Exception('task already exists!');
+            }
+        }
 		$task = TaskFactory::init($manager,$task,$task_name,$taskData,$persist,$isQueued,$tick);
 		new Process($manager,$task,$this->log);
 	}

@@ -8,10 +8,10 @@ namespace Async\Task;
 use Async\Manager;
 abstract class Task{
 	public $task_name = '';
-	private $task = null;
-	private $manager = null;
-	private $persist = false;
-	private $process_id = 0;
+	protected $task = null;
+	protected $manager = null;
+	protected $persist = false;
+	protected $process_id = 0;
 
 	function __construct($task_name,$task,$manager,$persist){
 		$this->task = $task;

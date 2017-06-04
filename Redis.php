@@ -12,7 +12,11 @@ class Redis{
         $this->port = $port;
     }
 
-    private function connect(){
+    public function connect(){
+        $this->redis->connect($this->host,$this->port);
+    }
+
+    public function pconnect(){
         $this->redis->pconnect($this->host,$this->port);
     }
 
@@ -23,21 +27,27 @@ class Redis{
             }
         }catch(\RedisException $e){
             $this->connect();
+            $this->redis->ping();
         }
         $arg_num = count($args);
-        switch($arg_num){
-        case 0:
-            return $this->redis->$name();
-            break;
-        case 1:
-            return $this->redis->$name($args[0]);
-            break;
-        case 2:
-            return $this->redis->$name($args[0],$args[1]);
-            break;
-        case 3: 
-            return $this->redis->$name($args[0],$args[1],$args[2]);
+        try{
+            switch($arg_num){
+            case 0:
+                return $this->redis->$name();
+                break;
+            case 1:
+                return $this->redis->$name($args[0]);
+                break;
+            case 2:
+                return $this->redis->$name($args[0],$args[1]);
+                break;
+            case 3: 
+                return $this->redis->$name($args[0],$args[1],$args[2]);
+            }
+        }catch(\RedisException $e){
+            $this->connect();
+            return $this->__call($name,$args);
         }
-        throw new Exception("damn , u should use reflection instead of enumeration");
+        throw new \Exception("damn , u should use reflection instead of enumeration");
     }
 }
