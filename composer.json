@@ -7,7 +7,7 @@
             "email": "muyizixiu@outlook.com"
         }
     ],
-    "require": {}
+    "require": {},
     "autoload":{
 	    "psr-4":{"Async\\":"src"}
     }
