@@ -4,7 +4,7 @@ php 异步任务库
 
 ## Install
 ```
-composer install muyizixiu/async
+composer install yizixiumu/async
 ```
 
 ## Usage
