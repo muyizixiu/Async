@@ -13,21 +13,25 @@ include "src/Task/Task.php";
 include "src/Task/BlockTask.php";
 include "src/Task/CommonTask.php";
 include "src/Task/TaskFactory.php";
-include "Redis.php";
+include "src/Redis.php";
 
 use Async\Async;
 use Async\Redis;
 
 
 
-$redis = new Redis('localhost',6379);
-$a = new Async($redis,'/tmp/async');
+$a = new Async('localhost',6379,'','/tmp/async');
+$task_name = 'queued task';
 $a->task(function($data){
 	echo 'hello Async'."$data\n";
-},'queued task',true,true,'123');
+},$task_name,true,true,'123');
 
-$newredis = new Redis('localhost',6379);
-$ab = new Async($newredis,'/tmp/async');
+for($i = 0;$i < 10;$i ++){
+    sleep(2);
+    $a->sendData($task_name,$i.'-');
+}
+
+$ab = new Async('localhost',6379,'','/tmp/async');
 $ab->task(function($data){
     echo 'i`m a new task. and i am the type that when i finish my job i just go away!';
     sleep(10);

@@ -127,12 +127,11 @@ class Manager{
 			$data = $this->redis->lpop($popKey);
 		}
         isset($data[1]) && $data = unserialize($data[1]);
-		switch($data){
-		case self::USR_EXIT:
+        if($data === self::USR_EXIT){
 			return self::USR_EXIT;
-		default:
-			return $data;
-		}
+        }else{
+            return $data;
+        }
 	}
 
 	/**

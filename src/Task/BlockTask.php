@@ -32,8 +32,7 @@ class BlockTask extends Task{
 				break;
 			($this->task)($this->task_data);
 			$data = $this->manager->readTaskData($this->task_name, $this->process_id, true);
-			if(!$this->manager->taskFinished($this->task_name))
-				break;
+			$this->manager->taskFinished($this->task_name);
 			switch($data){
             case Manager::USR_EXIT:
 				return;

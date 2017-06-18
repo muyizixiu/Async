@@ -21,11 +21,11 @@ class Async{
 	public $redis = null;
 
 
-	public function __construct($redis,$log){
+	public function __construct($redis_host,$redis_user,$redis_passwd,$log){
 		if(self::$instance instanceof self){
 			return self::$instance;
 		}
-		$this->redis = $redis;
+		$this->redis = new Redis($redis_host,$redis_user,$redis_passwd);
 		$this->log = $log;
 	}
 
@@ -50,4 +50,30 @@ class Async{
 		$task = TaskFactory::init($manager,$task,$task_name,$taskData,$persist,$isQueued,$tick);
 		new Process($manager,$task,$this->log);
 	}
+
+
+    /**
+     * 向常驻进程投递数据
+     * @param string $task_name 任务名字
+     * @param mixed $taskData 任务数据
+     * @return bool
+     */
+    public function sendData($task_name,$taskData){
+		$manager = new Manager($this->redis);
+		$exist = $manager->isTaskExist($task_name);
+        if(!$exist){
+            return false;
+        }
+        return $manager->sendData($task_name,$taskData);
+    }
+
+    /**
+     * 查询任务是否存在
+     * @param string $task_name 任务名字
+     * @return bool
+     */
+    public function isTaskExist($task_name){
+		$manager = new Manager($this->redis);
+        return $manager->isTaskExist($task_name);
+    }
 }
