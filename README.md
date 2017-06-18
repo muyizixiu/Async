@@ -10,24 +10,40 @@ composer install yizixiumu/async
 ## Usage
 普通异步任务
 ```
+use Async;
+$redis_host = "localhost:6379";
+$redis_user = "async";
+$redis_password = "";
 $async = new Async($redis_host,$redis_user,$redis_password,'/tmp/async);
 $a->task(function($data){
 	echo 'hello Async'."$data\n";
-  doSomething();
+    doSomething();
 },'common task');
 ```
 该任务执行完后便结束异步进程。异步进程的标准输出和标准错误均重定向到指定的log位置
 
 常驻队列异步任务
 ```
+use Async;
+$redis_host = "localhost:6379";
+$redis_user = "async";
+$redis_password = "";
+$task_name = 'queued task';
 $a = new Async($redis_host,$redis_user,$redis_password,'/tmp/async');
+//当任务不存在时创建任务
+if(!$a->isTaskExists($task_name)){
+    $a->task(function($data){
+        echo 'hello Async'."$data\n";
+        doSomething();
+    },$task_name,true,true,'123');
+}
 $a->task(function($data){
-  echo 'hello Async'."$data\n";
-  doSomething();
-},'queued task',true,true,'123');
+    echo 'hello Async'."$data\n";
+    doSomething();
+},$task_name,true,true,'123');
 
 for($i = 0;$i < 10;$i ++){
-    sleep(2);
+    sleep(10);
     $a->sendData($task_name,"这是我第$i个数据");
 }
 ```

@@ -41,11 +41,7 @@ class Async{
 		$manager = new Manager($this->redis);
 		$exist = $manager->isTaskExist($task_name);
         if($exist){
-            if($persist){
-                return $manager->sendData($task_name,$taskData);
-            }else{
-                throw new \Exception('task already exists!');
-            }
+            throw new \Exception('task already exists!');
         }
 		$task = TaskFactory::init($manager,$task,$task_name,$taskData,$persist,$isQueued,$tick);
 		new Process($manager,$task,$this->log);
