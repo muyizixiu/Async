@@ -8,11 +8,12 @@ composer install yizixiumu/async
 ```
 
 ## Usage
-对象
+类
 ```
 Async
 public __construct(string $redis_host, string $redis_user, string $redis_password, string $log)
 /**
+ * 创建一个任务
  * @param Closure $task 闭包，这个闭包为异步的任务进程内容
  * @param string $task_name 异步任务的名称，@WARNING 每个任务的名称必须唯一，否则会有冲突
  * @param bool $persist 是否持久化，持久化则意味着进程常驻
@@ -20,9 +21,15 @@ public __construct(string $redis_host, string $redis_user, string $redis_passwor
  * @param mixed $taskData 任务数据，进程会根据不同参数通过不同渠道将数据给$task任务
  * @param int $tick $task任务在持久化非阻塞的情况下为轮询执行，由tick指定执行时间
  */
-public __task(closure $task, string $task_name, bool $persist = false, bool $isQueued = false, mixed $task_data = null, int $tick = 0){
+public task(closure $task, string $task_name, bool $persist = false, bool $isQueued = false, mixed $task_data = null, int $tick = 0){
 }
+/**
+ * 查询任务是否存在
+ */
 public isTaskExists(string $task_name)
+/**
+ * 向任务投递数据
+ */
 public sendData(string $task_name, mixed $task_data)
 ```
 普通异步任务
